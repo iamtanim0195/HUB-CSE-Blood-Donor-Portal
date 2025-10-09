@@ -6,7 +6,7 @@ const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
 export default function SearchBar({ onSearch, onFilter }) {
     const [searchTerm, setSearchTerm] = useState('');
-    const [searchType, setSearchType] = useState('name'); // name, id, location, bloodGroup
+    const [searchType, setSearchType] = useState('bloodGroup'); // name, id, location, bloodGroup
     const [selectedBloodGroup, setSelectedBloodGroup] = useState('');
     const [showFilters, setShowFilters] = useState(false);
     const [availabilityFilter, setAvailabilityFilter] = useState('all'); // all, available, unavailable
@@ -46,14 +46,14 @@ export default function SearchBar({ onSearch, onFilter }) {
 
     const getSearchPlaceholder = () => {
         switch (searchType) {
+            case 'bloodGroup':
+                return 'Search by blood group...';
             case 'name':
                 return 'Search by student name...';
             case 'id':
                 return 'Search by student ID...';
             case 'location':
                 return 'Search by address or location...';
-            case 'bloodGroup':
-                return 'Search by blood group...';
             default:
                 return 'Search...';
         }
@@ -96,10 +96,10 @@ export default function SearchBar({ onSearch, onFilter }) {
                             onChange={(e) => setSearchType(e.target.value)}
                             className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent bg-white"
                         >
+                            <option value="bloodGroup">Blood Group</option>
                             <option value="name">Name</option>
                             <option value="id">Student ID</option>
                             <option value="location">Location</option>
-                            <option value="bloodGroup">Blood Group</option>
                         </select>
                     </div>
 
@@ -173,8 +173,8 @@ export default function SearchBar({ onSearch, onFilter }) {
                                         type="button"
                                         onClick={() => setSelectedBloodGroup(group)}
                                         className={`px-3 py-1 text-sm rounded-full border transition duration-200 ${selectedBloodGroup === group
-                                                ? 'bg-red-500 text-white border-red-500'
-                                                : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                                            ? 'bg-red-500 text-white border-red-500'
+                                            : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
                                             }`}
                                     >
                                         {group}
