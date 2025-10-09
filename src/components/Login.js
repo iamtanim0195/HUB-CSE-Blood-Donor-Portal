@@ -1,15 +1,50 @@
 'use client';
 import { auth, googleProvider } from '@/lib/firebase';
-import { signInWithPopup } from 'firebase/auth';
+import { signInWithPopup, signInWithRedirect, getRedirectResult } from 'firebase/auth';
 import Image from 'next/image';
 import { FcGoogle } from 'react-icons/fc';
+import { useState, useEffect } from 'react';
 
 export default function Login() {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(''); // Using consistent 'error' name
+
+    // Handle redirect result
+    useEffect(() => {
+        getRedirectResult(auth)
+            .then((result) => {
+                if (result) {
+                    console.log('Login successful via redirect');
+                }
+            })
+            .catch((error) => {
+                console.error('Redirect result error:', error);
+                setError('Login failed. Please try again.');
+            });
+    }, []);
+
     const handleGoogleLogin = async () => {
+        setLoading(true);
+        setError('');
+
         try {
             await signInWithPopup(auth, googleProvider);
         } catch (error) {
             console.error('Login error:', error);
+
+            if (error.code === 'auth/popup-blocked' ||
+                error.message.includes('sessionStorage') ||
+                error.message.includes('initial state')) {
+
+                // Fallback to redirect for mobile/popup issues
+                await signInWithRedirect(auth, googleProvider);
+            } else if (error.code === 'auth/popup-closed-by-user') {
+                setError('Login popup was closed. Please try again.');
+            } else {
+                setError('Login failed. Please try again.');
+            }
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -32,13 +67,26 @@ export default function Login() {
                     </p>
                 </div>
 
+                {error && (
+                    <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                        {error}
+                    </div>
+                )}
+
                 <div className="space-y-4">
                     <button
                         onClick={handleGoogleLogin}
-                        className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 rounded-lg px-4 py-3 text-gray-700 hover:bg-gray-50 transition duration-200 shadow-sm"
+                        disabled={loading}
+                        className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 rounded-lg px-4 py-3 text-gray-700 hover:bg-gray-50 transition duration-200 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        <FcGoogle className="w-6 h-6" />
-                        <span className="font-medium">Continue with Google</span>
+                        {loading ? (
+                            <div className="w-6 h-6 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+                        ) : (
+                            <FcGoogle className="w-6 h-6" />
+                        )}
+                        <span className="font-medium">
+                            {loading ? 'Signing in...' : 'Continue with Google'}
+                        </span>
                     </button>
                 </div>
 
