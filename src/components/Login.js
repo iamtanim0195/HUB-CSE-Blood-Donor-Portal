@@ -1,8 +1,8 @@
 'use client';
 import { auth, googleProvider } from '@/lib/firebase';
-import { 
-    signInWithPopup, 
-    signInWithRedirect, 
+import {
+    signInWithPopup,
+    signInWithRedirect,
     getRedirectResult,
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
@@ -77,7 +77,7 @@ export default function Login() {
             }
         } catch (error) {
             console.error('Email/password auth error:', error);
-            
+
             // Handle specific error cases
             switch (error.code) {
                 case 'auth/invalid-email':
@@ -157,7 +157,7 @@ export default function Login() {
                         {showForgotPassword ? 'Reset Password' : isLogin ? 'Welcome Back' : 'Create Account'}
                     </h2>
                     <p className="text-gray-600 mt-2">
-                        {showForgotPassword 
+                        {showForgotPassword
                             ? 'Enter your email to reset your password'
                             : 'Sign in to access the CSE Blood Donor Portal'
                         }
@@ -226,6 +226,22 @@ export default function Login() {
                                 )}
                             </button>
                         </form>
+                        {/* Toggle between login and signup */}
+                        <div className="text-center text-sm text-gray-600">
+                            <p>
+                                {isLogin ? "Don't have an account? " : "Already have an account? "}
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setIsLogin(!isLogin);
+                                        resetForm();
+                                    }}
+                                    className="text-red-600 hover:text-red-700 font-medium"
+                                >
+                                    {isLogin ? 'Sign up' : 'Sign in'}
+                                </button>
+                            </p>
+                        </div>
 
                         <div className="text-center">
                             <button
@@ -261,23 +277,6 @@ export default function Login() {
                                     {loading ? 'Signing in...' : 'Continue with Google'}
                                 </span>
                             </button>
-                        </div>
-
-                        {/* Toggle between login and signup */}
-                        <div className="text-center text-sm text-gray-600">
-                            <p>
-                                {isLogin ? "Don't have an account? " : "Already have an account? "}
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setIsLogin(!isLogin);
-                                        resetForm();
-                                    }}
-                                    className="text-red-600 hover:text-red-700 font-medium"
-                                >
-                                    {isLogin ? 'Sign up' : 'Sign in'}
-                                </button>
-                            </p>
                         </div>
                     </>
                 ) : (
