@@ -42,7 +42,7 @@ export default function UserList({ users, isAdmin, onDeleteUser }) {
                 </div>
 
                 {/* Sort Options */}
-                <div className="flex items-center gap-4">
+                {/* <div className="flex items-center gap-4">
                     <span className="text-sm text-gray-600 hidden sm:block">Sort by:</span>
                     <select
                         onChange={(e) => {
@@ -56,7 +56,7 @@ export default function UserList({ users, isAdmin, onDeleteUser }) {
                         <option value="bloodGroup">Blood Group</option>
                         <option value="recent">Recently Updated</option>
                     </select>
-                </div>
+                </div> */}
             </div>
 
 
