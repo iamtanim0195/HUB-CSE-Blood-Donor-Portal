@@ -327,9 +327,7 @@ export default function Login() {
                     </form>
                 )}
 
-                <div className="text-center text-sm text-gray-500">
-                    <p>Only university email addresses are allowed</p>
-                </div>
+                
             </div>
         </div>
     );
